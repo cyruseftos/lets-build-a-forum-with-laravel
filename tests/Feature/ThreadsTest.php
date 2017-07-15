@@ -10,15 +10,16 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 class ThreadsTest extends TestCase
 {
     use DatabaseMigrations;
-    /**
-     * A basic test example.
-     *
-     * @return void
-     */
+
+    /** @test */
     public function a_user_can_browse_threads()
     {
-        $response = $this->get('/threads');
+        $thread = factory('App\Thread')->create();
 
-        $response->assertStatus(200);
+        $response = $this->get('/threads');
+        $response->assertSee($thread->title);
+
+        $response = $this->get('/threads/' . $thread->id);
+        $response->assertSee($thread->title);
     }
 }
